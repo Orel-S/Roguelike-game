@@ -1,0 +1,11 @@
+C:\Users\Orel\source\repos\Game\Game\bin\Debug\netcoreapp2.2\Game.deps.json
+C:\Users\Orel\source\repos\Game\Game\bin\Debug\netcoreapp2.2\Game.runtimeconfig.json
+C:\Users\Orel\source\repos\Game\Game\bin\Debug\netcoreapp2.2\Game.runtimeconfig.dev.json
+C:\Users\Orel\source\repos\Game\Game\bin\Debug\netcoreapp2.2\Game.dll
+C:\Users\Orel\source\repos\Game\Game\bin\Debug\netcoreapp2.2\Game.pdb
+C:\Users\Orel\source\repos\Game\Game\obj\Debug\netcoreapp2.2\Game.csprojAssemblyReference.cache
+C:\Users\Orel\source\repos\Game\Game\obj\Debug\netcoreapp2.2\Game.csproj.CoreCompileInputs.cache
+C:\Users\Orel\source\repos\Game\Game\obj\Debug\netcoreapp2.2\Game.AssemblyInfoInputs.cache
+C:\Users\Orel\source\repos\Game\Game\obj\Debug\netcoreapp2.2\Game.AssemblyInfo.cs
+C:\Users\Orel\source\repos\Game\Game\obj\Debug\netcoreapp2.2\Game.dll
+C:\Users\Orel\source\repos\Game\Game\obj\Debug\netcoreapp2.2\Game.pdb
