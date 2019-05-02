@@ -20,7 +20,7 @@ namespace Game
                 }
             }
         }
-        public void Insert_Room(Room room, char[,] map, int x, int y)
+        private void Insert_Room(Room room, char[,] map, int x, int y)
         {
             for (int i = y; i < (y + room.Height); ++i)
             {
@@ -37,7 +37,7 @@ namespace Game
                 }
             }
         }
-        public bool Room_For_Room(Room room, char[,] map, int x, int y)
+        private bool Room_For_Room(Room room, char[,] map, int x, int y)
         {
             for (int i = y; i < (y + room.Height); ++i)
             {
@@ -55,7 +55,7 @@ namespace Game
             }
             return true;
         }
-        public void Generate_Rooms(char[,] map)
+        private void Generate_Rooms(char[,] map)
         {
             Random random = new Random();
             for (int i = 0; i < 50; i++)
@@ -84,7 +84,7 @@ namespace Game
                 Console.WriteLine();
             }
         }
-        public void Fix_Neighbours(char[,] map)
+        private void Fix_Neighbours(char[,] map)
         {
             //49 is key here to avoid out of bounds error
             for (int i = 1; i < 49; ++i)
@@ -104,7 +104,7 @@ namespace Game
                 }
             }
         }
-        public void Fix_Walls(char[,] map)
+        private void Fix_Walls(char[,] map)
         {
             // First loop cleans up empty spaces where walls should be
             for (int i = 1; i < 49; ++i)
@@ -156,7 +156,7 @@ namespace Game
                 }
             }
         }
-        public void Initialize_Walls(char[,] map)
+        private void Initialize_Walls(char[,] map)
         {
             for (int i = 0; i < 50; i++)
             {
@@ -170,7 +170,7 @@ namespace Game
             }
         }
 
-        public int Size_Area(char[,] map, int x, int y, ref HashSet<(int, int)> Counted_Coords)
+        private int Size_Area(char[,] map, int x, int y, ref HashSet<(int, int)> Counted_Coords)
         {
             List<(int, int)> Direction_List = new List<(int, int)>();
             if (Counted_Coords.Contains((x, y)))
@@ -207,7 +207,7 @@ namespace Game
             return sum;
         }
 
-        public void Remove_Exterior_Rooms(char[,] map)
+        private void Remove_Exterior_Rooms(char[,] map)
         {
             int counter = 1;
             for (int i = 1; i < 49; i++)
@@ -303,15 +303,7 @@ namespace Game
         
     }
     class Program
-    {
-
-/*        public static void BuildTestRoom(int a, int b)
-        {
-            Room test_room = new Room();
-            test_room.Width = a;
-            test_room.Height = b;
-            test_room.Draw_Room(test_room);}
- */      
+    {  
         static void Main(string[] args)
         {
             Player player = new Player();            
