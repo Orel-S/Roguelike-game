@@ -130,8 +130,23 @@ namespace Game
                 Console.WriteLine();
             }
         }
-        public void Render_Map(char[,] map, int side_length)
+        public void Render_Map(char[,] map, Player player)
         {
+            map[player.location.Item1, player.location.Item2] = player.Symbol;
+
+            for (int i = 0; i < 50; ++i)
+            {
+                for (int j = 0; j < 50; ++j)
+                {
+                    Console.Write("{0}", map[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+        public void Render_Map(char[,] map, int side_length, Player player)
+        {
+            map[player.location.Item1, player.location.Item2] = player.Symbol;
+
             for (int i = 0; i < side_length; ++i)
             {
                 for (int j = 0; j < side_length; ++j)
@@ -446,15 +461,36 @@ namespace Game
             }
             return map;
         }
+        public void Move_Entity(char[,] map, Entity entity, string direction)
+        {
+            map[entity.location.Item1, entity.location.Item2] = FLOOR;
+
+            if (direction == "up" && map[entity.location.Item1 - 1, entity.location.Item2] == FLOOR)
+            {
+                entity.location.Item1--;
+            }
+            else if (direction == "left" && map[entity.location.Item1, entity.location.Item2 - 1] == FLOOR)
+            {
+                entity.location.Item2--;
+            }
+            else if (direction == "right" && map[entity.location.Item1, entity.location.Item2 + 1] == FLOOR)
+            {
+                entity.location.Item2++;
+            }
+            else if (direction == "down" && map[entity.location.Item1 + 1, entity.location.Item2] == FLOOR)
+            {
+                entity.location.Item1++;
+            }
+            else
+            {
+                Console.WriteLine("Please input a valid move direction.");
+            }
+        }
     }
     public class Entity
     {
-        private int[] location = new int[2];
-        public int[] Location
-        {
-            get { return location; }
-            set { location = value; }
-        }
+        public char Symbol;
+        public (int, int) location;
         private int healthPoints;
         public int HealthPoints
         {
@@ -471,7 +507,9 @@ namespace Game
         //public spell[] spellArray = new spell[4];
     }
     public class Player : Entity
-    { }
+    {
+        public new char Symbol = '@';
+    }
     public class Room
     {
         private int width;
@@ -515,8 +553,22 @@ namespace Game
         {
             Player player = new Player();            
             Mapping mapping = new Mapping();
-            char[,] map = mapping.Create_Random_Map(50, false);
-            mapping.Render_Map(map, 50);
+            player.location = (5, 5);
+            char[,] map = mapping.Create_Random_Map(10, false);
+            mapping.Render_Map(map, 10, player);
+            Console.WriteLine("\n\n");
+            mapping.Move_Entity(map, player, "up");
+            mapping.Render_Map(map, 10, player);
+            Console.WriteLine("\n\n");
+            mapping.Move_Entity(map, player, "right");
+            mapping.Render_Map(map, 10, player);
+            Console.WriteLine("\n\n");
+            mapping.Move_Entity(map, player, "down");
+            mapping.Render_Map(map, 10, player);
+            Console.WriteLine("\n\n");
+            mapping.Move_Entity(map, player, "left");
+            mapping.Render_Map(map, 10, player);
+            Console.WriteLine("\n\n");
             Console.WriteLine("Program Compiled Successfully!");
         }
     }
