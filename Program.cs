@@ -157,6 +157,12 @@ namespace Game
                 }
             }
         }
+
+        public int Size_Area(char[,] map, int x, int y)
+        {
+            int area = 0;
+            return area;
+        }
     }
     public class Entity
     {
