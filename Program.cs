@@ -144,6 +144,19 @@ namespace Game
                 }
             }
         }
+        public void Initialize_Walls(char[,] map)
+        {
+            for (int i = 0; i < 50; i++)
+            {
+                for (int j = 0; j < 50; ++j)
+                {
+                    if (map[i, j] == BLANK)
+                    {
+                        map[i, j] = WALL;
+                    }
+                }
+            }
+        }
     }
     public class Entity
     {
@@ -286,6 +299,9 @@ namespace Game
             mapping.Render_Map(Map);
             Console.WriteLine("Applying Wall Fix \n\n\n");
             mapping.Fix_Walls(Map);
+            mapping.Render_Map(Map);
+            Console.WriteLine("Removing Blanks \n\n\n");
+            mapping.Initialize_Walls(Map);
             mapping.Render_Map(Map);
             Console.WriteLine("Program Compiled Successfully!");
         }
