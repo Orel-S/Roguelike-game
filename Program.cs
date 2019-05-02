@@ -488,18 +488,46 @@ namespace Game
 
             if (direction == "up" && map[entity.location.Item1 - magnitude, entity.location.Item2] == FLOOR)
             {
+                for (int i = 1; i < magnitude; i++)
+                {
+                    if (map[entity.location.Item1 - i, entity.location.Item2] == WALL)
+                    {
+                        return;
+                    }
+                }
                 entity.location.Item1-= magnitude;
             }
             else if (direction == "left" && map[entity.location.Item1, entity.location.Item2 - magnitude] == FLOOR)
             {
+                for (int i = 1; i < magnitude; i++)
+                {
+                    if (map[entity.location.Item1, entity.location.Item2 - i] == WALL)
+                    {
+                        return;
+                    }
+                }
                 entity.location.Item2-= magnitude;
             }
             else if (direction == "right" && map[entity.location.Item1, entity.location.Item2 + magnitude] == FLOOR)
             {
+                for (int i = 1; i < magnitude; i++)
+                {
+                    if (map[entity.location.Item1, entity.location.Item2 + i] == WALL)
+                    {
+                        return;
+                    }
+                }
                 entity.location.Item2+= magnitude;
             }
             else if (direction == "down" && map[entity.location.Item1 + magnitude, entity.location.Item2] == FLOOR)
             {
+                for (int i = 1; i < magnitude; i++)
+                {
+                    if (map[entity.location.Item1 + i, entity.location.Item2] == WALL)
+                    {
+                        return;
+                    }
+                }
                 entity.location.Item1+= magnitude;
             }
         }
@@ -587,8 +615,6 @@ namespace Game
             string input = Console.ReadLine();
             string temp = input.Trim();
             string[] split_input = temp.Split(" ");
-            //string temp = split_input[0].Trim();
-            //split_input[0] = temp;
             if (split_input[0] == "move" && split_input.Length == 2)
             {
                 mapping.Move_Entity(map, player, split_input[1]);
@@ -598,7 +624,14 @@ namespace Game
                try
                 {
                     int magnitude = Int32.Parse(split_input[2]);
-                    mapping.Move_Entity(map, player, split_input[1], Int32.Parse(split_input[2]));
+                    if (magnitude < 1)
+                    {
+                        Console.WriteLine("Invalid input, no negative numbers.");
+                    }
+                    else
+                    {
+                        mapping.Move_Entity(map, player, split_input[1], magnitude);
+                    }
                 }
                 catch (FormatException)
                 {
