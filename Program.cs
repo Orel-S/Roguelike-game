@@ -482,6 +482,27 @@ namespace Game
                 entity.location.Item1++;
             }
         }
+        public void Move_Entity(char[,] map, Entity entity, string direction, int magnitude)
+        {
+            map[entity.location.Item1, entity.location.Item2] = FLOOR;
+
+            if (direction == "up" && map[entity.location.Item1 - magnitude, entity.location.Item2] == FLOOR)
+            {
+                entity.location.Item1-= magnitude;
+            }
+            else if (direction == "left" && map[entity.location.Item1, entity.location.Item2 - magnitude] == FLOOR)
+            {
+                entity.location.Item2-= magnitude;
+            }
+            else if (direction == "right" && map[entity.location.Item1, entity.location.Item2 + magnitude] == FLOOR)
+            {
+                entity.location.Item2+= magnitude;
+            }
+            else if (direction == "down" && map[entity.location.Item1 + magnitude, entity.location.Item2] == FLOOR)
+            {
+                entity.location.Item1+= magnitude;
+            }
+        }
         public void Spawn_Player(char[,] map, Player player, int side_length)
         {
             for (int i = side_length - 1; i >= 0; i--)
@@ -564,10 +585,30 @@ namespace Game
         {
             Console.WriteLine("Awaiting input...");
             string input = Console.ReadLine();
-            string[] split_input = input.Split(" ");
-            if (split_input[0] == "move")
+            string temp = input.Trim();
+            string[] split_input = temp.Split(" ");
+            //string temp = split_input[0].Trim();
+            //split_input[0] = temp;
+            if (split_input[0] == "move" && split_input.Length == 2)
             {
                 mapping.Move_Entity(map, player, split_input[1]);
+            }
+            else if (split_input[0] == "move" && split_input.Length == 3)
+            {
+               try
+                {
+                    int magnitude = Int32.Parse(split_input[2]);
+                    mapping.Move_Entity(map, player, split_input[1], Int32.Parse(split_input[2]));
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Invalid input");
+                }
+                catch (OverflowException)
+                {
+                    Console.WriteLine("Magnitude too high, invalid input.");
+                }
+                
             }
             else if (split_input[0] == "end")
             {
