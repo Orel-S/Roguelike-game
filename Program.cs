@@ -569,6 +569,10 @@ namespace Game
             {
                 mapping.Move_Entity(map, player, split_input[1]);
             }
+            else if (split_input[0] == "end")
+            {
+                Environment.Exit(0);
+            }
             else
             {
                 Console.WriteLine("Invalid Input.");
