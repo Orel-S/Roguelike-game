@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Game
 {
     
     public class Mapping
     {
-        public const char WALL = '|';
+        public const char WALL = '#';
         public const char FLOOR = ' ';
         public const char BLANK = '*';
         public void Insert_Room(Room room, char[,] map, int x, int y)
@@ -54,7 +55,7 @@ namespace Game
                     room.Width = random.Next(3, 6);
                     room.Height = random.Next(3, 6);
                     int Determine = random.Next(1, 10000);
-                    if (Room_For_Room(room, map, j, i) && Determine < 100000 && map[i, j] == BLANK)
+                    if (Room_For_Room(room, map, j, i) && Determine < 1000000 && map[i, j] == BLANK)
                     {
                         Insert_Room(room, map, j, i);
                     }
@@ -158,10 +159,63 @@ namespace Game
             }
         }
 
-        public int Size_Area(char[,] map, int x, int y)
+        public int Size_Area(char[,] map, int x, int y, ref HashSet<(int, int)> Counted_Coords)
         {
-            int area = 0;
-            return area;
+            List<(int, int)> Direction_List = new List<(int, int)>();
+            if (Counted_Coords.Contains((x, y)))
+            {
+                return 0;
+            }
+            else
+            {
+                Counted_Coords.Add((x, y));
+                
+                if (map[x - 1, y] == FLOOR)
+                {
+                    Direction_List.Add((x - 1, y));
+                }
+                if (map[x + 1, y] == FLOOR)
+                {
+                    Direction_List.Add((x + 1, y));
+                }
+                if (map[x, y - 1] == FLOOR)
+                {
+                    Direction_List.Add((x, y - 1));
+                }
+                if (map[x, y + 1] == FLOOR)
+                {
+                    Direction_List.Add((x, y + 1));
+                }
+            }
+            int sum = 1;
+            foreach (var direction in Direction_List)
+            {
+                
+                sum += Size_Area(map, direction.Item1, direction.Item2, ref Counted_Coords);
+            }
+            return sum;
+        }
+
+        public void Remove_Exterior_Rooms(char[,] map)
+        {
+            int counter = 1;
+            for (int i = 1; i < 49; i++)
+            {
+                for (int j = 1; j < 49; ++j)
+                {
+
+                    HashSet<(int, int)> Temp = new HashSet<(int, int)>();
+                    if (map[i, j] == FLOOR)
+                    {
+                        if (Size_Area(map, i, j, ref Temp) <= 500)
+                        {
+                            map[i, j] = WALL;
+                            Console.WriteLine("RER #: {0}", counter);
+                            counter++;
+                        }
+                    }
+                }
+            }
         }
     }
     public class Entity
@@ -308,6 +362,9 @@ namespace Game
             mapping.Render_Map(Map);
             Console.WriteLine("Removing Blanks \n\n\n");
             mapping.Initialize_Walls(Map);
+            mapping.Render_Map(Map);
+            Console.WriteLine("Removing Outside Areas \n\n\n");
+            mapping.Remove_Exterior_Rooms(Map);
             mapping.Render_Map(Map);
             Console.WriteLine("Program Compiled Successfully!");
         }
