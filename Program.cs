@@ -391,6 +391,10 @@ namespace Game
                 }
             }
         }
+
+        // Recommended Sizes:
+        //    Minimum: 10 by 10
+        //    Maximum: 130 by 130
         public char[,] Create_Random_Map()
         {
             char[,] map = new char[50, 50];
@@ -511,8 +515,8 @@ namespace Game
         {
             Player player = new Player();            
             Mapping mapping = new Mapping();
-            char[,] map = mapping.Create_Random_Map(200, true);
-            mapping.Render_Map(map, 200);
+            char[,] map = mapping.Create_Random_Map(50, false);
+            mapping.Render_Map(map, 50);
             Console.WriteLine("Program Compiled Successfully!");
         }
     }
