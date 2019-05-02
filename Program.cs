@@ -491,6 +491,7 @@ namespace Game
     {
         public char Symbol;
         public (int, int) location;
+        public bool IsAlive;
         private int healthPoints;
         public int HealthPoints
         {
@@ -548,27 +549,35 @@ namespace Game
         
     }
     class Program
-    {  
+    {
+        void Input(char[,] map, Player player, Mapping mapping)
+        {
+            Console.WriteLine("Awaiting input...");
+            string input = Console.ReadLine();
+            string[] split_input = input.Split(" ");
+            if (split_input[0] == "move")
+            {
+                mapping.Move_Entity(map, player, split_input[1]);
+            }
+            else
+            {
+                Console.WriteLine("Invalid Input.");
+            }
+        }
         static void Main(string[] args)
         {
             Player player = new Player();            
             Mapping mapping = new Mapping();
+            Program program = new Program();
             player.location = (5, 5);
+            player.IsAlive = true;
             char[,] map = mapping.Create_Random_Map(10, false);
-            mapping.Render_Map(map, 10, player);
-            Console.WriteLine("\n\n");
-            mapping.Move_Entity(map, player, "up");
-            mapping.Render_Map(map, 10, player);
-            Console.WriteLine("\n\n");
-            mapping.Move_Entity(map, player, "right");
-            mapping.Render_Map(map, 10, player);
-            Console.WriteLine("\n\n");
-            mapping.Move_Entity(map, player, "down");
-            mapping.Render_Map(map, 10, player);
-            Console.WriteLine("\n\n");
-            mapping.Move_Entity(map, player, "left");
-            mapping.Render_Map(map, 10, player);
-            Console.WriteLine("\n\n");
+            while (player.IsAlive)
+            {
+                mapping.Render_Map(map, 10, player);
+                program.Input(map, player, mapping);
+            }
+            
             Console.WriteLine("Program Compiled Successfully!");
         }
     }
