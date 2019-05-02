@@ -481,9 +481,19 @@ namespace Game
             {
                 entity.location.Item1++;
             }
-            else
+        }
+        public void Spawn_Player(char[,] map, Player player, int side_length)
+        {
+            for (int i = side_length - 1; i >= 0; i--)
             {
-                Console.WriteLine("Please input a valid move direction.");
+                for (int j = 0; j < side_length; ++j)
+                {
+                    if (map[i, j] == FLOOR)
+                    {
+                        player.location = (i, j);
+                        return;
+                    }
+                }
             }
         }
     }
@@ -569,12 +579,12 @@ namespace Game
             Player player = new Player();            
             Mapping mapping = new Mapping();
             Program program = new Program();
-            player.location = (5, 5);
             player.IsAlive = true;
-            char[,] map = mapping.Create_Random_Map(10, false);
+            char[,] map = mapping.Create_Random_Map(50, false);
+            mapping.Spawn_Player(map, player, 50);
             while (player.IsAlive)
             {
-                mapping.Render_Map(map, 10, player);
+                mapping.Render_Map(map, 50, player);
                 program.Input(map, player, mapping);
             }
             
