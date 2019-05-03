@@ -10,7 +10,7 @@ namespace Game
         public const char FLOOR = ' ';
         public const char BLANK = '*';
 
-        private void Initialize_Map(ref char[,] Map)
+        /*private void Initialize_Map(ref char[,] Map)
         {
             for (int i = 0; i < 50; i++)
             {
@@ -20,6 +20,155 @@ namespace Game
                 }
             }
         }
+        */
+        /*private bool Room_For_Room(Room room, char[,] map, int x, int y)
+        {
+            for (int i = y; i < (y + room.Height); ++i)
+            {
+                for (int j = x; j < (x + room.Width); ++j)
+                {
+                    if (i >= 50 || j >= 50 || i < 0 || j < 0)
+                    {
+                        return false;
+                    }
+                    if (map[i, j] == WALL || map[i, j] == FLOOR)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        */
+        /*private void Generate_Rooms(char[,] map)
+        {
+            Random random = new Random();
+            for (int i = 0; i < 50; i++)
+            {
+                for (int j = 0; j < 50; j++)
+                {
+                    Room room = new Room();
+                    room.Width = random.Next(3, 6);
+                    room.Height = random.Next(3, 6);
+                    int Determine = random.Next(1, 10000);
+                    if (Room_For_Room(room, map, j, i) && Determine < 1000000 && map[i, j] == BLANK)
+                    {
+                        Insert_Room(room, map, j, i);
+                    }
+                }
+            }
+        }
+        */
+        /*private void Fix_Neighbours(char[,] map)
+        {
+            //49 is key here to avoid out of bounds error
+            for (int i = 1; i < 49; ++i)
+            {
+                for (int j = 1; j < 49; ++j)
+                {
+                    if (map[i,j] == WALL &&
+                        map[i + 1, j] == WALL &&
+                        (map[i, j - 1] != BLANK &&
+                        map[i, j + 1] != BLANK) &&
+                        (map[i + 1, j - 1] != BLANK &&
+                        map[i + 1, j + 1] != BLANK))
+                    {
+                        map[i, j] = FLOOR;
+                        map[i + 1, j] = FLOOR;
+                    }
+                }
+            }
+        }
+        */
+        /*private void Fix_Walls(char[,] map)
+        {
+            // First loop cleans up empty spaces where walls should be
+            for (int i = 1; i < 49; ++i)
+            {
+                for (int j = 1; j < 49; ++j)
+                {
+                    if (map[i, j] == FLOOR &&
+                        (map[i - 1, j] == BLANK ||
+                        map[i + 1, j] == BLANK ||
+                        map[i , j + 1] == BLANK ||
+                        map[i , j - 1] == BLANK ||
+                        map[i - 1, j - 1] == BLANK ||
+                        map[i + 1, j + 1] == BLANK ||
+                        map[i + 1, j - 1] == BLANK ||
+                        map[i - 1, j + 1] == BLANK))
+                    {
+                        map[i, j] = WALL;
+                    } 
+                }
+            }
+            // Second loop cleans up walls where empty spaces should be
+            for (int i = 1; i < 49; ++i)
+            {
+                for (int j = 1; j < 49; ++j)
+                {
+                    if (map[i, j] == WALL &&
+                        (map[i - 1, j] == FLOOR &&
+                        map[i + 1, j] == FLOOR &&
+                        map[i, j + 1] == FLOOR &&
+                        map[i, j - 1] == FLOOR &&
+                        map[i - 1, j - 1] == FLOOR &&
+                        map[i + 1, j + 1] == FLOOR &&
+                        map[i + 1, j - 1] == FLOOR &&
+                        map[i - 1, j + 1] == FLOOR))
+                    {
+                        map[i, j] = FLOOR;
+                    }
+                }
+            }
+            // Third loop cleans up outer border areas
+            for (int i = 0; i < 50; i++)
+            {
+                for (int j = 0; j < 50; ++j)
+                {
+                    if ((i == 0 || i == 49 || j == 0 || j == 49) && map[i, j] == FLOOR)
+                    {
+                        map[i, j] = WALL;
+                    }
+                }
+            }
+        }
+        */
+        /*private void Initialize_Walls(char[,] map)
+        {
+            for (int i = 0; i < 50; i++)
+            {
+                for (int j = 0; j < 50; ++j)
+                {
+                    if (map[i, j] == BLANK)
+                    {
+                        map[i, j] = WALL;
+                    }
+                }
+            }
+        }
+        */
+        /*private void Remove_Exterior_Rooms(char[,] map)
+        {
+            int counter = 1;
+            for (int i = 1; i < 49; i++)
+            {
+                for (int j = 1; j < 49; ++j)
+                {
+
+                    HashSet<(int, int)> Temp = new HashSet<(int, int)>();
+                    if (map[i, j] == FLOOR)
+                    {
+                        if (Size_Area(map, i, j, ref Temp) <= 500)
+                        {
+                            map[i, j] = WALL;
+                            //                          Console.WriteLine("RER #: {0}", counter);
+                            counter++;
+                        }
+                    }
+                }
+            }
+        }
+        */
         private void Initialize_Map(ref char[,] Map, int side_length)
         {
             for (int i = 0; i < side_length; i++)
@@ -47,24 +196,7 @@ namespace Game
                 }
             }
         }
-        private bool Room_For_Room(Room room, char[,] map, int x, int y)
-        {
-            for (int i = y; i < (y + room.Height); ++i)
-            {
-                for (int j = x; j < (x + room.Width); ++j)
-                {
-                    if (i >= 50 || j >= 50 || i < 0 || j < 0)
-                    {
-                        return false;
-                    }
-                    if (map[i, j] == WALL || map[i, j] == FLOOR)
-                    {
-                        return false;
-                    }
-                }
-            }
-            return true;
-        }
+        
         private bool Room_For_Room(Room room, char[,] map, int x, int y, int side_length)
         {
             for (int i = y; i < (y + room.Height); ++i)
@@ -83,24 +215,7 @@ namespace Game
             }
             return true;
         }
-        private void Generate_Rooms(char[,] map)
-        {
-            Random random = new Random();
-            for (int i = 0; i < 50; i++)
-            {
-                for (int j = 0; j < 50; j++)
-                {
-                    Room room = new Room();
-                    room.Width = random.Next(3, 6);
-                    room.Height = random.Next(3, 6);
-                    int Determine = random.Next(1, 10000);
-                    if (Room_For_Room(room, map, j, i) && Determine < 1000000 && map[i, j] == BLANK)
-                    {
-                        Insert_Room(room, map, j, i);
-                    }
-                }
-            }
-        }
+        
         private void Generate_Rooms(char[,] map, int side_length)
         {
             Random random = new Random();
@@ -156,26 +271,7 @@ namespace Game
                 Console.WriteLine();
             }
         }
-        private void Fix_Neighbours(char[,] map)
-        {
-            //49 is key here to avoid out of bounds error
-            for (int i = 1; i < 49; ++i)
-            {
-                for (int j = 1; j < 49; ++j)
-                {
-                    if (map[i,j] == WALL &&
-                        map[i + 1, j] == WALL &&
-                        (map[i, j - 1] != BLANK &&
-                        map[i, j + 1] != BLANK) &&
-                        (map[i + 1, j - 1] != BLANK &&
-                        map[i + 1, j + 1] != BLANK))
-                    {
-                        map[i, j] = FLOOR;
-                        map[i + 1, j] = FLOOR;
-                    }
-                }
-            }
-        }
+        
         private void Fix_Neighbours(char[,] map, int side_length)
         {
             //49 is key here to avoid out of bounds error
@@ -196,58 +292,7 @@ namespace Game
                 }
             }
         }
-        private void Fix_Walls(char[,] map)
-        {
-            // First loop cleans up empty spaces where walls should be
-            for (int i = 1; i < 49; ++i)
-            {
-                for (int j = 1; j < 49; ++j)
-                {
-                    if (map[i, j] == FLOOR &&
-                        (map[i - 1, j] == BLANK ||
-                        map[i + 1, j] == BLANK ||
-                        map[i , j + 1] == BLANK ||
-                        map[i , j - 1] == BLANK ||
-                        map[i - 1, j - 1] == BLANK ||
-                        map[i + 1, j + 1] == BLANK ||
-                        map[i + 1, j - 1] == BLANK ||
-                        map[i - 1, j + 1] == BLANK))
-                    {
-                        map[i, j] = WALL;
-                    } 
-                }
-            }
-            // Second loop cleans up walls where empty spaces should be
-            for (int i = 1; i < 49; ++i)
-            {
-                for (int j = 1; j < 49; ++j)
-                {
-                    if (map[i, j] == WALL &&
-                        (map[i - 1, j] == FLOOR &&
-                        map[i + 1, j] == FLOOR &&
-                        map[i, j + 1] == FLOOR &&
-                        map[i, j - 1] == FLOOR &&
-                        map[i - 1, j - 1] == FLOOR &&
-                        map[i + 1, j + 1] == FLOOR &&
-                        map[i + 1, j - 1] == FLOOR &&
-                        map[i - 1, j + 1] == FLOOR))
-                    {
-                        map[i, j] = FLOOR;
-                    }
-                }
-            }
-            // Third loop cleans up outer border areas
-            for (int i = 0; i < 50; i++)
-            {
-                for (int j = 0; j < 50; ++j)
-                {
-                    if ((i == 0 || i == 49 || j == 0 || j == 49) && map[i, j] == FLOOR)
-                    {
-                        map[i, j] = WALL;
-                    }
-                }
-            }
-        }
+        
         private void Fix_Walls(char[,] map, int side_length)
         {
             // First loop cleans up empty spaces where walls should be
@@ -300,19 +345,7 @@ namespace Game
                 }
             }
         }
-        private void Initialize_Walls(char[,] map)
-        {
-            for (int i = 0; i < 50; i++)
-            {
-                for (int j = 0; j < 50; ++j)
-                {
-                    if (map[i, j] == BLANK)
-                    {
-                        map[i, j] = WALL;
-                    }
-                }
-            }
-        }
+        
         private void Initialize_Walls(char[,] map, int side_length)
         {
             for (int i = 0; i < side_length; i++)
@@ -364,27 +397,7 @@ namespace Game
             return sum;
         }
 
-        private void Remove_Exterior_Rooms(char[,] map)
-        {
-            int counter = 1;
-            for (int i = 1; i < 49; i++)
-            {
-                for (int j = 1; j < 49; ++j)
-                {
-
-                    HashSet<(int, int)> Temp = new HashSet<(int, int)>();
-                    if (map[i, j] == FLOOR)
-                    {
-                        if (Size_Area(map, i, j, ref Temp) <= 500)
-                        {
-                            map[i, j] = WALL;
-                            //                          Console.WriteLine("RER #: {0}", counter);
-                            counter++;
-                        }
-                    }
-                }
-            }
-        }
+        
         private void Remove_Exterior_Rooms(char[,] map, int side_length)
         {
             int counter = 1;
@@ -407,31 +420,31 @@ namespace Game
             }
         }
 
-        // Recommended Sizes:
+        // Recommended Map Sizes:
         //    Minimum: 10 by 10
         //    Maximum: 130 by 130
         public char[,] Create_Random_Map()
         {
             char[,] map = new char[50, 50];
-            Initialize_Map(ref map);
-            Generate_Rooms(map);
-            Fix_Neighbours(map);
-            Fix_Walls(map);
-            Initialize_Walls(map);
-            Remove_Exterior_Rooms(map);
+            Initialize_Map(ref map, 50);
+            Generate_Rooms(map, 50);
+            Fix_Neighbours(map, 50);
+            Fix_Walls(map, 50);
+            Initialize_Walls(map, 50);
+            Remove_Exterior_Rooms(map, 50);
             return map;
         }
         public char[,] Create_Random_Map(bool HasExteriorRooms)
         {
             char[,] map = new char[50, 50];
-            Initialize_Map(ref map);
-            Generate_Rooms(map);
-            Fix_Neighbours(map);
-            Fix_Walls(map);
-            Initialize_Walls(map);
+            Initialize_Map(ref map, 50);
+            Generate_Rooms(map, 50);
+            Fix_Neighbours(map, 50);
+            Fix_Walls(map, 50);
+            Initialize_Walls(map, 50);
             if (!HasExteriorRooms)
             {
-                Remove_Exterior_Rooms(map);
+                Remove_Exterior_Rooms(map, 50);
             }
             return map;
         }
@@ -533,6 +546,21 @@ namespace Game
         }
         public void Spawn_Player(char[,] map, Player player, int side_length)
         {
+            for (int i = side_length - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < side_length; ++j)
+                {
+                    if (map[i, j] == FLOOR)
+                    {
+                        player.location = (i, j);
+                        return;
+                    }
+                }
+            }
+        }
+        public void Spawn_Player(char[,] map, Player player)
+        {
+            int side_length = 50;
             for (int i = side_length - 1; i >= 0; i--)
             {
                 for (int j = 0; j < side_length; ++j)
@@ -647,6 +675,19 @@ namespace Game
             {
                 Environment.Exit(0);
             }
+            else if (split_input[0] == "help")
+            {
+                Console.WriteLine("Commands:\n");
+                Console.WriteLine("\tMovement:");
+                Console.WriteLine("\t\tmove up (num)");
+                Console.WriteLine("\t\tmove down (num)");
+                Console.WriteLine("\t\tmove left (num)");
+                Console.WriteLine("\t\tmove right (num)");
+                Console.WriteLine("\tMisc.:");
+                Console.WriteLine("\t\tend");
+                Console.WriteLine("Press any key to continue...");
+                Console.ReadKey(true);
+            }
             else
             {
                 Console.WriteLine("Invalid Input.");
@@ -658,11 +699,11 @@ namespace Game
             Mapping mapping = new Mapping();
             Program program = new Program();
             player.IsAlive = true;
-            char[,] map = mapping.Create_Random_Map(50, false);
-            mapping.Spawn_Player(map, player, 50);
+            char[,] map = mapping.Create_Random_Map();
+            mapping.Spawn_Player(map, player);
             while (player.IsAlive)
             {
-                mapping.Render_Map(map, 50, player);
+                mapping.Render_Map(map, player);
                 program.Input(map, player, mapping);
             }
             
