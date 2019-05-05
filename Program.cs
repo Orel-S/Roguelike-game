@@ -558,6 +558,39 @@ namespace Game
                 }
             }
         }
+        public void Spawn_Entity(char[,] map, Entity entity, int side_length, int Random_Max, bool isTopSpawning)
+        {
+            if (isTopSpawning)
+            {
+
+                Random random = new Random();
+                int Determine;
+                for (int i = 0; i < side_length; i++)
+                {
+                    for (int j = 0; j < side_length; ++j)
+                    {
+                        Determine = random.Next(1, 1000);
+                        if (map[i, j] == FLOOR && Determine < Random_Max)
+                        {
+                            entity.location = (i, j);
+                            return;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Spawn_Entity(map, entity, side_length, Random_Max);
+            }
+        }
+        public void Spawn_Entity(char[,] map, Entity entity, int Random_Max, bool isTopSpawning)
+        {
+            Spawn_Entity(map, entity, 50, Random_Max, isTopSpawning);
+        }
+        public void Spawn_Entity(char[,] map, Entity entity, bool isTopSpawning)
+        {
+            Spawn_Entity(map, entity, 50, 50, isTopSpawning);
+        }
         public void Spawn_Entity(char[,] map, int Random_Max, Entity entity)
         {
             Spawn_Entity(map, entity, 50, Random_Max);
@@ -717,7 +750,7 @@ namespace Game
             player.IsAlive = true;
             char[,] map = mapping.Create_Random_Map();
             mapping.Spawn_Entity(map, player);
-            mapping.Spawn_Entity(map, 2, downStairs);
+            mapping.Spawn_Entity(map, downStairs, 10, true);
             List<Entity> entities = new List<Entity>();
             entities.Add(downStairs);
             entities.Add(player);
