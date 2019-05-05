@@ -9,6 +9,8 @@ namespace Game
         public const char WALL = '#';
         public const char FLOOR = ' ';
         public const char BLANK = '*';
+        public const char STAIRDOWN = '>';
+        public const char STAIRUP = '<';
 
         /*private void Initialize_Map(ref char[,] Map)
         {
@@ -468,32 +470,14 @@ namespace Game
             }
             return map;
         }
-        public void Move_Entity(char[,] map, Entity entity, string direction)
-        {
-            map[entity.location.Item1, entity.location.Item2] = FLOOR;
-
-            if (direction == "up" && map[entity.location.Item1 - 1, entity.location.Item2] == FLOOR)
-            {
-                entity.location.Item1--;
-            }
-            else if (direction == "left" && map[entity.location.Item1, entity.location.Item2 - 1] == FLOOR)
-            {
-                entity.location.Item2--;
-            }
-            else if (direction == "right" && map[entity.location.Item1, entity.location.Item2 + 1] == FLOOR)
-            {
-                entity.location.Item2++;
-            }
-            else if (direction == "down" && map[entity.location.Item1 + 1, entity.location.Item2] == FLOOR)
-            {
-                entity.location.Item1++;
-            }
-        }
+        
         public void Move_Entity(char[,] map, Entity entity, string direction, int magnitude)
         {
             map[entity.location.Item1, entity.location.Item2] = FLOOR;
 
-            if (direction == "up" && map[entity.location.Item1 - magnitude, entity.location.Item2] == FLOOR)
+            if (direction == "up" && 
+                (map[entity.location.Item1 - magnitude, entity.location.Item2] == FLOOR ||
+                 map[entity.location.Item1 - magnitude, entity.location.Item2] == STAIRDOWN))
             {
                 for (int i = 1; i < magnitude; i++)
                 {
@@ -504,7 +488,9 @@ namespace Game
                 }
                 entity.location.Item1-= magnitude;
             }
-            else if (direction == "left" && map[entity.location.Item1, entity.location.Item2 - magnitude] == FLOOR)
+            else if (direction == "left" && 
+                (map[entity.location.Item1, entity.location.Item2 - magnitude] == FLOOR || 
+                map[entity.location.Item1, entity.location.Item2 - magnitude] == STAIRDOWN))
             {
                 for (int i = 1; i < magnitude; i++)
                 {
@@ -515,7 +501,9 @@ namespace Game
                 }
                 entity.location.Item2-= magnitude;
             }
-            else if (direction == "right" && map[entity.location.Item1, entity.location.Item2 + magnitude] == FLOOR)
+            else if (direction == "right" && 
+                (map[entity.location.Item1, entity.location.Item2 + magnitude] == FLOOR ||
+                map[entity.location.Item1, entity.location.Item2 + magnitude] == STAIRDOWN))
             {
                 for (int i = 1; i < magnitude; i++)
                 {
@@ -526,7 +514,9 @@ namespace Game
                 }
                 entity.location.Item2+= magnitude;
             }
-            else if (direction == "down" && map[entity.location.Item1 + magnitude, entity.location.Item2] == FLOOR)
+            else if (direction == "down" && 
+                (map[entity.location.Item1 + magnitude, entity.location.Item2] == FLOOR || 
+                map[entity.location.Item1 + magnitude, entity.location.Item2] == STAIRDOWN))
             {
                 for (int i = 1; i < magnitude; i++)
                 {
@@ -537,6 +527,10 @@ namespace Game
                 }
                 entity.location.Item1+= magnitude;
             }
+        }
+        public void Move_Entity(char[,] map, Entity entity, string direction)
+        {
+            Move_Entity(map, entity, direction, 1);
         }
         public void Spawn_Entity(char[,] map, Entity entity, int side_length)
         {
@@ -725,11 +719,24 @@ namespace Game
             mapping.Spawn_Entity(map, player);
             mapping.Spawn_Entity(map, 2, downStairs);
             List<Entity> entities = new List<Entity>();
-            entities.Add(player);
             entities.Add(downStairs);
+            entities.Add(player);
             while (player.IsAlive)
             {
                 mapping.Render_Map(map, entities);
+                if (player.location == downStairs.location)
+                {
+                    Console.WriteLine("\n\n\n\n========================================================================================");
+                    Console.WriteLine("========================================================================================");
+                    Console.WriteLine("========================================================================================");
+                    Console.WriteLine("You Win!");
+                    Console.WriteLine("Normally, the game would allow you to descend to the next level at this point.");
+                    Console.WriteLine("========================================================================================");
+                    Console.WriteLine("========================================================================================");
+                    Console.WriteLine("========================================================================================");
+                    Environment.Exit(0);
+
+                }
                 program.Input(map, player, mapping);
             }
             
