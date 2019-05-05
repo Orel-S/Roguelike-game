@@ -245,22 +245,16 @@ namespace Game
                 Console.WriteLine();
             }
         }
-        public void Render_Map(char[,] map, Player player)
+        public void Render_Map(char[,] map, List<Entity> entities)
         {
-            map[player.location.Item1, player.location.Item2] = player.Symbol;
-
-            for (int i = 0; i < 50; ++i)
-            {
-                for (int j = 0; j < 50; ++j)
-                {
-                    Console.Write("{0}", map[i, j]);
-                }
-                Console.WriteLine();
-            }
+            Render_Map(map, 50, entities);
         }
-        public void Render_Map(char[,] map, int side_length, Player player)
+        public void Render_Map(char[,] map, int side_length, List<Entity> entities)
         {
-            map[player.location.Item1, player.location.Item2] = player.Symbol;
+            foreach (var entity in entities)
+            {
+                map[entity.location.Item1, entity.location.Item2] = entity.Symbol;
+            }
 
             for (int i = 0; i < side_length; ++i)
             {
@@ -544,59 +538,86 @@ namespace Game
                 entity.location.Item1+= magnitude;
             }
         }
-        public void Spawn_Player(char[,] map, Player player, int side_length)
+        public void Spawn_Entity(char[,] map, Entity entity, int side_length)
         {
+            Spawn_Entity(map, entity, side_length, 50);
+        }
+        public void Spawn_Entity(char[,] map, Entity entity)
+        {
+            Spawn_Entity(map, entity, 50);
+        }
+
+        public void Spawn_Entity(char[,] map, Entity entity, int side_length, int Random_Max)
+        {
+            Random random = new Random();
+            int Determine;
             for (int i = side_length - 1; i >= 0; i--)
             {
                 for (int j = 0; j < side_length; ++j)
                 {
-                    if (map[i, j] == FLOOR)
+                    Determine = random.Next(1, 1000);
+                    if (map[i, j] == FLOOR && Determine < Random_Max)
                     {
-                        player.location = (i, j);
+                        entity.location = (i, j);
                         return;
                     }
                 }
             }
         }
-        public void Spawn_Player(char[,] map, Player player)
+        public void Spawn_Entity(char[,] map, int Random_Max, Entity entity)
         {
-            int side_length = 50;
-            for (int i = side_length - 1; i >= 0; i--)
-            {
-                for (int j = 0; j < side_length; ++j)
-                {
-                    if (map[i, j] == FLOOR)
-                    {
-                        player.location = (i, j);
-                        return;
-                    }
-                }
-            }
+            Spawn_Entity(map, entity, 50, Random_Max);
         }
     }
     public class Entity
     {
-        public char Symbol;
+        protected char _symbol;
         public (int, int) location;
         public bool IsAlive;
         private int healthPoints;
+        private int manaPoints;
+
+        public Entity(char symbol) {
+            _symbol = symbol;
+        }
+
+        public char Symbol
+        {
+            get { return _symbol; }
+            set { _symbol = value; }
+        }
         public int HealthPoints
         {
             get { return healthPoints; }
             set { healthPoints = value; }
         }
-        private int manaPoints;
+        
         public int ManaPoints
         {
             get { return manaPoints; }
             set { manaPoints = value; }
         }
+
+        
         //public attack[] attackArray = new attack[4];
         //public spell[] spellArray = new spell[4];
     }
     public class Player : Entity
     {
-        public new char Symbol = '@';
+        public Player()
+            : base( '@')
+        {
+
+        }
+    }
+    public class Stairs : Entity
+    {
+        public bool isDown;
+        public Stairs()
+            : base('>')
+        {
+
+        }
     }
     public class Room
     {
@@ -695,15 +716,20 @@ namespace Game
         }
         static void Main(string[] args)
         {
-            Player player = new Player();            
+            Player player = new Player();
+            Stairs downStairs = new Stairs();
             Mapping mapping = new Mapping();
             Program program = new Program();
             player.IsAlive = true;
             char[,] map = mapping.Create_Random_Map();
-            mapping.Spawn_Player(map, player);
+            mapping.Spawn_Entity(map, player);
+            mapping.Spawn_Entity(map, 2, downStairs);
+            List<Entity> entities = new List<Entity>();
+            entities.Add(player);
+            entities.Add(downStairs);
             while (player.IsAlive)
             {
-                mapping.Render_Map(map, player);
+                mapping.Render_Map(map, entities);
                 program.Input(map, player, mapping);
             }
             
